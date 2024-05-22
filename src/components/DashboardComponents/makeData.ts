@@ -9,19 +9,6 @@ export type Book = {
   top_work: string;
 };
 
-type OpenLibraryDoc = {
-  title: string;
-  author_name?: string[]; // Optional string array
-  first_publish_year?: number; // Optional number
-  ratings_average?: number; // Optional number
-  subject?: string[]; // Optional string array
-};
-
-type OpenLibraryAuthor = {
-  birth_date?: string;
-  top_work?: string;
-};
-
 export async function makeData(numBooks: number): Promise<Book[]> {
   try {
     const responseBooks = await fetch(
