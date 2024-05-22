@@ -3,6 +3,7 @@ import { Book } from "./makeData";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { BiFirstPage, BiLastPage } from "react-icons/bi";
 import { Bars } from "react-loader-spinner";
+import { saveAs } from "file-saver";
 
 interface PaginationProps {
   books: Book[];
@@ -112,6 +113,26 @@ const Pagination: React.FC<PaginationProps> = ({ books }) => {
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setVisibleRows(parseInt(e.target.value));
     setEndingIndex(parseInt(e.target.value));
+  };
+
+  const handleDownloadCSV = () => {
+    const csvData = books
+      .map((book) => {
+        // Customize the columns and their order as needed
+        return [
+          book.title,
+          book.author_name.join(", "),
+          book.first_publish_year,
+          book.subject,
+          book.birth_date,
+          book.top_work,
+          book.ratings_average,
+        ];
+      })
+      .join("\n");
+
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "books.csv");
   };
 
   return (
@@ -300,6 +321,12 @@ const Pagination: React.FC<PaginationProps> = ({ books }) => {
               <option value="50">50</option>
               <option value="100">100</option>
             </select>
+            <button
+              className="bg-black text-white rounded-md hover:bg-white hover:text-black hover:border hover:border-black transition-colors"
+              onClick={handleDownloadCSV}
+            >
+              Download CSV
+            </button>
           </div>
         </>
       )}
